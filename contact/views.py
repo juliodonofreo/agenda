@@ -7,4 +7,5 @@ def index(request):
     context = {
         "texto": "Contact inicial"
     }
+    
     return render(request, "contact/index.html", context)
