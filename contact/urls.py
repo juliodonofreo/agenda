@@ -20,4 +20,5 @@ from contact import views
 
 urlpatterns = [
     path("", views.index, name="contact"),
+    path("contact/<int:id>", views.contact, name="single_contact")
 ]
