@@ -11,7 +11,8 @@ def index(request):
     .order_by("-id")[:10]
     
     context = {
-        "contacts": contacts
+        "contacts": contacts,
+        "site_title": "Contatos - "
     }
     
     return render(request, "contact/index.html", context)
@@ -23,6 +24,7 @@ def contact(request, id):
         models.Contact.objects, pk=id, show=True)
     
     context = {
-        "contact": single_contact
+        "contact": single_contact,
+        "site_title": single_contact.__str__() + " - "
     }
     return render(request, "contact/contact.html", context)
