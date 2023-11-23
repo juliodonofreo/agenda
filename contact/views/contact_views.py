@@ -1,11 +1,11 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from contact import models
+from django.db.models import Q
 from django.http import Http404
 
 
 # Create your views here.
 def index(request):
-    
     contacts = models.Contact.objects \
     .filter(show=True)\
     .order_by("-id")[:10]
@@ -17,6 +17,25 @@ def index(request):
     
     return render(request, "contact/index.html", context)
 
+def search(request):
+    if request.method == "GET":
+        valor = request.GET.get("q", "").capitalize().strip()
+        
+        if valor == "":
+            return redirect("contact")
+        contacts = models.Contact.objects\
+            .filter(show=True)\
+                .filter(
+                    Q(first_name__icontains=valor) |
+                    Q(last_nome__icontains=valor) |
+                    Q(email__icontains=valor))
+        
+        context = {
+            "site_title": "Contatos - ",
+            "contacts": contacts,
+        }
+        
+        return render(request, "contact/index.html", context)
 
 def contact(request, id):
  

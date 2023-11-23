@@ -20,5 +20,6 @@ from contact import views
 
 urlpatterns = [
     path("", views.index, name="contact"),
+    path("search/", views.search, name="search"),
     path("contact/<int:id>", views.contact, name="single_contact")
 ]
