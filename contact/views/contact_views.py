@@ -19,16 +19,16 @@ def index(request):
 
 def search(request):
     if request.method == "GET":
-        valor = request.GET.get("q", "").capitalize().strip()
+        value = request.GET.get("q", "").capitalize().strip()
         
-        if valor == "":
+        if value == "":
             return redirect("contact")
         contacts = models.Contact.objects\
             .filter(show=True)\
                 .filter(
-                    Q(first_name__icontains=valor) |
-                    Q(last_nome__icontains=valor) |
-                    Q(email__icontains=valor))
+                    Q(first_name__icontains=value) |
+                    Q(last_nome__icontains=value) |
+                    Q(email__icontains=value))
         
         context = {
             "site_title": "Contatos - ",
