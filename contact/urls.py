@@ -21,5 +21,9 @@ from contact import views
 urlpatterns = [
     path("", views.index, name="contact"),
     path("search/", views.search, name="search"),
-    path("contact/<int:id>", views.contact, name="single_contact")
+    
+    # contact (CRUD)
+    path("contact/<int:id>/detail/", views.contact, name="single_contact"),
+    path("contact/create/", views.create, name="create_contact"),
+
 ]
