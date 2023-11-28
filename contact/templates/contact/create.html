@@ -1,7 +1,36 @@
-{% extends "global/base.html" %}
-
+{% extends 'global/base.html' %}
 
 {% block content %}
-    <h1>CREATE CONTACT</h1>
-{% endblock content %}
+  <div class="form-wrapper">
+
+    <h2>Contact</h2>
     
+    <form 
+      action="{% url 'create_contact' %}"
+      method="POST"
+      enctype="multipart/form-data"
+    >
+
+    {% csrf_token %}
+
+      <div class="form-content">
+        <div class="form-group">
+          <label for="first_name">first_name</label>
+          <input type="text" name="first_name" maxlength="255" id="first_name">
+        </div>
+
+        <div class="form-group">
+          <label for="last_name">last_name</label>
+          <input type="text" name="last_name" maxlength="255" id="last_name">
+        </div>
+      </div>
+
+      <div class="form-content">
+        <div class="form-group">
+          <button class="btn" type="submit">Send</button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+{% endblock content %}
