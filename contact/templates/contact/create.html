@@ -9,6 +9,7 @@
       action="{% url 'create_contact' %}"
       method="POST"
       enctype="multipart/form-data"
+      id="contact"
     >
 
     {% csrf_token %}
@@ -33,4 +34,13 @@
 
     </form>
   </div>
+
+  <script>
+      const form = document.querySelector("#contact");
+      form.addEventListener("submit", (e)=>{
+        if(form.method != "POST"){
+          form.method = "POST";
+        }
+      });
+  </script>
 {% endblock content %}
