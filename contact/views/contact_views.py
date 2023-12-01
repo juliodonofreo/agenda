@@ -1,12 +1,13 @@
+from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
-from django.core.paginator import Paginator
+from django.http import HttpRequest, HttpResponse
 
 from contact import models
 
 
 # Create your views here.
-def index(request):
+def index(request: HttpRequest) -> HttpResponse:
     contacts = models.Contact.objects \
     .filter(show=True)\
     .order_by("-id")
@@ -22,7 +23,7 @@ def index(request):
     
     return render(request, "contact/index.html", context)
 
-def search(request):
+def search(request: HttpRequest) -> HttpResponse:
     if request.method == "GET":
         value = request.GET.get("q", "").capitalize().strip()
         
@@ -46,7 +47,7 @@ def search(request):
         
         return render(request, "contact/index.html", context)
 
-def contact(request, id):
+def contact(request: HttpRequest, id: int) -> HttpResponse:
  
     single_contact = get_object_or_404(
         models.Contact.objects, pk=id, show=True)
