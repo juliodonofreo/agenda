@@ -17,7 +17,7 @@ class Category(models.Model):
 
 # Create your models here.
 class Contact(models.Model):
-    first_name = models.CharField(max_length=50)
+    first_name = models.CharField(max_length=50, help_text="Texto de ajuda para seu usuário")
     last_nome = models.CharField(max_length=50, blank=True)
     phone = models.CharField(max_length=50)
     email = models.EmailField(max_length=254, blank=True)
