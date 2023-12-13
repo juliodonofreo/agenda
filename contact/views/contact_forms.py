@@ -1,12 +1,10 @@
-from django.core.paginator import Paginator
-from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import redirect, render, get_object_or_404
-from contact.forms import ContactForm
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
-from contact import models
+from contact.forms import ContactForm
 from contact.models import Contact
+
 
 # Create your views here.
 def create(request: HttpRequest) -> HttpResponse:
@@ -57,3 +55,12 @@ def update(request, id):
     }
 
     return render(request, "contact/create.html", context)
+
+
+def delete(request, id):
+    contact = get_object_or_404(
+        Contact, id=id, show=True
+    )
+    contact.delete()
+    
+    return redirect("contact")
