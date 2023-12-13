@@ -1,9 +1,19 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from contact.models import Contact
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import get_user_model
 
 
 class ContactForm(forms.ModelForm):
+    
+    picture = forms.ImageField(
+        widget=forms.FileInput(
+            attrs={
+                "accept": "image/*"
+            }
+        )
+    )
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -17,13 +27,9 @@ class ContactForm(forms.ModelForm):
     class Meta:
         model = Contact
         fields = ["first_name", "last_nome", "phone",
-                  "email", "description", "category"]
-        # widgets = {
-            # "first_name": forms.TextInput(attrs={
-            #     "class": "classe-a classe-b",
-            #     "placeholder": "Escreva aqui"
-        #     })
-        # }
+                  "email", "description", "category",
+                  "picture"]
+        
 
     def clean(self):
         cleaned_data = self.cleaned_data
@@ -41,4 +47,10 @@ class ContactForm(forms.ModelForm):
                 "last_nome",
                 ValidationError("Primeiro nome não pode ser igual ao segundo", code="invalid")
             )
-            
+        super().clean()
+
+
+class RegisterForm(UserCreationForm):
+    class Meta:
+        model = get_user_model()
+        fields = ["username", "email", "first_name", "last_name"]
