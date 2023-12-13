@@ -25,5 +25,7 @@ urlpatterns = [
     # contact (CRUD)
     path("contact/<int:id>/detail/", views.contact, name="single_contact"),
     path("contact/create/", views.create, name="create_contact"),
+    path("contact/<int:id>/update/", views.update, name="update_contact"),
+
 
 ]
