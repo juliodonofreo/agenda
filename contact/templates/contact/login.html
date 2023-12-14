@@ -3,9 +3,15 @@
 {% block content %}
   <div class="form-wrapper">
 
-    <h2>Register</h2>
+    <h2>Login</h2>
+
+    {% if user.is_authenticated %}
+      <p>Você fez login como {{ user.username }}. Clique <a href="{% url 'logout_user' %}">aqui</a> para sair.</p>
+      {% else %}
+      {% include 'contact/partials/form.html' %}
+    {% endif %}
+
     
-    {% include 'contact/partials/form.html' %}
     
   </div>
 

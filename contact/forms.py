@@ -76,8 +76,8 @@ class RegisterForm(UserCreationForm):
         
         if user.objects.filter(email=email):  # Estruturas de dados vazias retornam False, isto que está sendo checado aqui
             raise ValidationError(message={
-                "email": "este email já existe",
-                }, 
+                "email": "Este email já existe",
+                },
                 code="invalid")
             
         return cleaned_data

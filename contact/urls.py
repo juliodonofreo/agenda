@@ -29,6 +29,10 @@ urlpatterns = [
     path("contact/<int:id>/delete/", views.delete, name="delete_contact"),
     
     # user
-    path("user/create/", views.register, name="create_user")
+    path("user/create/", views.register, name="create_user"),
+    path("user/login/", views.login_view, name="login_user"),
+    path("user/logout/", views.logout_view, name="logout_user")
+
+
     
 ]
