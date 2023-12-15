@@ -1,8 +1,14 @@
 from django import forms
-from django.core.exceptions import ValidationError
-from contact.models import Contact
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import password_validation
+from django.contrib.auth.hashers import make_password
+
+from django.core.exceptions import ValidationError
+from django.utils.safestring import mark_safe
+
+
+from contact.models import Contact
 
 
 class ContactForm(forms.ModelForm):
@@ -81,4 +87,95 @@ class RegisterForm(UserCreationForm):
                 code="invalid")
             
         return cleaned_data
+
+class RegisterUpdateForm(forms.ModelForm):
+    first_name = forms.CharField(
+        required=True, 
+        min_length=3,
+        )
+    
+    last_name = forms.CharField(
+        required=True, 
+        min_length=3,
+        )
+    
+    email = forms.EmailField(required=True)
+    
+    password = forms.CharField(
+        label="Senha",
+        required=False, 
+        min_length=8,
+        widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
+        help_text=password_validation.password_validators_help_text_html())
+    
+    password2 = forms.CharField(
+        label="Confirmar senha",
+        required=False, 
+        min_length=8,
+        widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
+        help_text="Use a mesma senha que antes")
+    
+    
+    class Meta:
+        model = get_user_model()
+        fields = [
+            "first_name","last_name", "email", "password", "password2"]
         
+    def clean_email(self):
+        cleaned_data = super().clean()
+        email = cleaned_data.get("email", None)
+        current_email = self.instance.email
+        
+        user = get_user_model()
+        
+        if user.objects.filter(email=email) and current_email != email:  # Estruturas de dados vazias retornam False, isto que está sendo checado aqui
+             self.add_error("email", ValidationError("Este email já existe"))
+        return email
+            
+    def clean_password(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        
+        if password:
+            try:
+                password_validation.validate_password(password)
+            except ValidationError as errors:
+                self.add_error("password", ValidationError(errors))
+                return password
+                
+        return password
+    
+    def clean_password2(self):
+        cleaned_data = super().clean()
+        password2 = cleaned_data.get("password2")
+        
+        return password2
+        
+        
+    def clean(self):    
+        password1 = self.cleaned_data.get("password")
+        password2 = self.cleaned_data.get("password2")
+                
+        if password1 is None or password2 is None:
+            return super().clean()
+
+        if password1 != password2:
+            self.add_error("password2",
+                            ValidationError("Senhas não batem"))
+
+        return super().clean()
+    
+
+    def save(self, commit=True):
+        cleaned_data = self.cleaned_data
+        user = get_user_model().objects.get(username=self.instance.username)
+
+        password = cleaned_data.get("password")
+
+        if password:
+            user.set_password(password)
+
+        if commit:
+            user.save()
+
+        return user

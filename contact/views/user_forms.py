@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import auth
 
-from contact.forms import RegisterForm
+from contact.forms import RegisterForm, RegisterUpdateForm
 
 def register(request):
     form = RegisterForm()
@@ -45,3 +45,26 @@ def login_view(request):
 def logout_view(request):
     auth.logout(request)
     return redirect("login_user")
+
+
+def user_update(request):
+    
+    if request.method == "GET":
+        form = RegisterUpdateForm(instance=request.user)
+
+        context = {
+            "form": form
+        }
+        return render(request, "contact/user_update.html", context)
+
+    form = RegisterUpdateForm(data=request.POST, instance=request.user)
+    context = {
+            "form": form,
+    }
+    
+    if form.is_valid():
+        form.save()
+        messages.success(request, "Dados atualizados com sucesso")
+        return redirect("login_user")
+    
+    return render(request, "contact/user_update.html", context)

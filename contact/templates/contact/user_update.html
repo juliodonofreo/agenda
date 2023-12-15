@@ -1,0 +1,20 @@
+{% extends 'global/base.html' %}
+
+{% block content %}
+  <div class="form-wrapper">
+
+    <h2>Update user</h2>
+    
+    {% include 'contact/partials/form.html' %}
+    
+  </div>
+
+  <script>
+      const form = document.querySelector("#user");
+      form.addEventListener("submit", (e)=>{
+        if(form.method != "POST"){
+          form.method = "POST";
+        }
+      });
+  </script>
+{% endblock content %}
