@@ -1,8 +1,8 @@
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 
 from contact.forms import ContactForm
 from contact.models import Contact
@@ -22,7 +22,9 @@ def create(request: HttpRequest) -> HttpResponse:
         }
 
         if form.is_valid():
-            contact = form.save()
+            contact = form.save(commit=False)
+            contact.owner = request.user
+            contact.save()
             return redirect("update_contact", id=contact.id)
         return render(request, "contact/create.html", context)
 
@@ -36,7 +38,7 @@ def create(request: HttpRequest) -> HttpResponse:
 
 def update(request, id):
     contact = get_object_or_404(
-        Contact, id=id, show=True
+        Contact, id=id, show=True, owner=request.user
     )
     form_action = reverse("update_contact", args=(id,))
     
@@ -62,7 +64,7 @@ def update(request, id):
 
 def delete(request, id):
     contact = get_object_or_404(
-        Contact, id=id, show=True
+        Contact, id=id, show=True, owner=request.user
     )
     contact.delete()
     

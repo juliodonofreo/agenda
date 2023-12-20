@@ -1,12 +1,9 @@
 from django import forms
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, password_validation
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import password_validation
 from django.contrib.auth.hashers import make_password
-
 from django.core.exceptions import ValidationError
 from django.utils.safestring import mark_safe
-
 
 from contact.models import Contact
 
@@ -14,6 +11,8 @@ from contact.models import Contact
 class ContactForm(forms.ModelForm):
     
     picture = forms.ImageField(
+        allow_empty_file=True,
+        required=False,
         widget=forms.FileInput(
             attrs={
                 "accept": "image/*"
