@@ -27,6 +27,7 @@ def register(request):
 def login_view(request):
     
     form = AuthenticationForm(request)
+    next = request.GET.get("next")
     
     if request.method == "POST":
         form = AuthenticationForm(request, data=request.POST)
@@ -35,6 +36,9 @@ def login_view(request):
             user = form.get_user()
             messages.success(request, "Logado com sucesso")
             auth.login(request, user)
+            
+            if next:
+                return redirect(next)
             return redirect("login_user")
             
     context = {
