@@ -2,12 +2,14 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 from contact.forms import ContactForm
 from contact.models import Contact
 
 
 # Create your views here.
+@login_required(login_url="login_user")
 def create(request: HttpRequest) -> HttpResponse:
 
     form_action = reverse("create_contact")
