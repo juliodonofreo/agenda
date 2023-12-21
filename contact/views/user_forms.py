@@ -37,7 +37,7 @@ def login_view(request):
             messages.success(request, "Logado com sucesso")
             auth.login(request, user)
             
-            if next:
+            if next is not None:
                 return redirect(next)
             return redirect("login_user")
             

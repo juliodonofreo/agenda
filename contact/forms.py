@@ -120,6 +120,7 @@ class RegisterUpdateForm(forms.ModelForm):
         fields = [
             "first_name","last_name", "email", "password", "password2"]
         
+        
     def clean_email(self):
         cleaned_data = super().clean()
         email = cleaned_data.get("email", None)
@@ -130,6 +131,7 @@ class RegisterUpdateForm(forms.ModelForm):
         if user.objects.filter(email=email) and current_email != email:  # Estruturas de dados vazias retornam False, isto que está sendo checado aqui
              self.add_error("email", ValidationError("Este email já existe"))
         return email
+          
             
     def clean_password(self):
         cleaned_data = super().clean()
@@ -143,6 +145,7 @@ class RegisterUpdateForm(forms.ModelForm):
                 return password
                 
         return password
+    
     
     def clean_password2(self):
         cleaned_data = super().clean()

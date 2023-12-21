@@ -25,7 +25,7 @@ def create(request: HttpRequest) -> HttpResponse:
             contact = form.save(commit=False)
             contact.owner = request.user
             contact.save()
-            return redirect("update_contact", id=contact.id)
+            return redirect("contact")
         return render(request, "contact/create.html", context)
 
     context = {
@@ -51,7 +51,7 @@ def update(request, id):
 
         if form.is_valid():
             contact = form.save()
-            return redirect("update_contact", id=contact.id)
+            return redirect("contact")
         return render(request, "contact/create.html", context)
 
     context = {
